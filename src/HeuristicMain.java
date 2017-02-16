@@ -48,14 +48,13 @@ class HeuristicMain {
 		 		/* Calculando qte de digitos do maior elemento (d) */
 		 		int d = 0;
 		 		for (int exp = 1; max/exp > 0; exp *= 10)
-            		d++;
+            				d++;
 
 		 		//System.out.println("max: "+max+"\nmin: "+min+"\nrange (k): "+k+"\nnum de dig (d): "+d);
 		 		//System.out.println("Number. Size : "+arrayInt.length);
 
 		 		/* Primeira tentativa, analisando counting */
 
-		 		
 		 		/** Range Condition
 		 		* range pro size
 		 		* numero de instancias pequena (500.000) aceita o 1.5 * size como memoria aux
@@ -75,14 +74,14 @@ class HeuristicMain {
 
 		 		else if(rangeCondition && d > 4){
 		 			//System.out.println(">>>> CountingSort <<<<");
-		 			begin = System.currentTimeMillis();
+		 			//begin = System.currentTimeMillis();
 		 			CountingSort.sort(arrayInt, max, min);
 		 			//System.out.println("Time CountingSort: "+((System.currentTimeMillis()) - begin)+" ms");
 		 		}
 
 		 		else if(d <= 4){
 		 			//System.out.println(">>>> RadixSort <<<<");
-		 			begin = System.currentTimeMillis();
+		 			//begin = System.currentTimeMillis();
 		 			RadixSort.sort(arrayInt, max, min);
 		 			//System.out.println("Time RadixSort: "+((System.currentTimeMillis()) - begin)+" ms");
 		 		}
@@ -93,29 +92,25 @@ class HeuristicMain {
 
 		 		else if(testHashBucket(size, max, min, arrayInt)){
 		 			//System.out.println(">>>> BucketSort <<<<"); //muita estrutura dados
-		 			begin = System.currentTimeMillis();
+		 			//begin = System.currentTimeMillis();
 		 			BucketSort.sort(arrayInt, max, min);
 		 			//System.out.println("Time BucketSort: "+((System.currentTimeMillis()) - begin)+" ms");
 		 		}
 
 		 		else{
 		 			//System.out.println(">>>> Arrays <<<<");
-		 			begin = System.currentTimeMillis();
+		 			//begin = System.currentTimeMillis();
 		 			QuickDualPivot.sort(arrayInt);
 		 			//System.out.println("Time Arrays: "+((System.currentTimeMillis()) - begin)+" ms");
 		 		}			
 
 	            /* Exibindo vetor */
 	            for (int i = 0; i < arrayInt.length; i++) 
-                	System.out.println(arrayInt[i]);
-
-                
+                	System.out.println(arrayInt[i]);         
             }
-
             else{
 
             	/* Eh do tipo STRING */
-
             	String[] arrayString = new String[size];
             	arrayString[j] = line;
             	j++;
@@ -133,14 +128,13 @@ class HeuristicMain {
                 	System.out.println(arrayString[i]);
 
             }
-
             inReader.close();              
 
-        }catch (IOException e) {
+          }catch (IOException e) {
             System.err.print(e.getMessage());
-        } catch (Exception e) {
+          } catch (Exception e) {
             System.err.print(e.getMessage());
-        }
+          }
 	}
 
 	/**
@@ -150,7 +144,6 @@ class HeuristicMain {
 	*
 	*/
 	private static boolean testHashBucket(int size, long max, long min, long[] vector){
-		
 
 		int numBuckets = (size < BucketSort.maxBuckets) ? size/2 : BucketSort.maxBuckets;
 		//System.out.println("numBuckets: "+numBuckets);
