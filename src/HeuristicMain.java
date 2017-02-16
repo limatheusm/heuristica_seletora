@@ -28,85 +28,75 @@ class HeuristicMain {
             	j++;
 
             	/* Preenchendo array */
-	            while((line = inReader.readLine()) != null) {
-	                arrayInt[j] = Long.parseLong(line);	             
-	                j++;
-	            }	
+	        while((line = inReader.readLine()) != null) {
+	            arrayInt[j] = Long.parseLong(line);	             
+	            j++;
+	        }	
 				
-				/* Segue Heuristica */
+		/* Segue Heuristica */
+		/* Calculando range (k) */
+		long min = arrayInt[0];
+	        long max = arrayInt[0];
+		for (int i = 1; i < arrayInt.length; i++) {
+			min = (arrayInt[i] < min) ? arrayInt[i] : min;
+			max = (arrayInt[i] > max) ? arrayInt[i] : max;
+		}
+ 		long k = (max - min) + 1;
+		/* Calculando qte de digitos do maior elemento (d) */
+		int d = 0;
+		for (int exp = 1; max/exp > 0; exp *= 10)
+            		d++;
+ 		//System.out.println("max: "+max+"\nmin: "+min+"\nrange (k): "+k+"\nnum de dig (d): "+d);
+		//System.out.println("Number. Size : "+arrayInt.length);
 
-				/* Calculando range (k) */
-				long min = arrayInt[0];
-			    long max = arrayInt[0];
-		 		for (int i = 1; i < arrayInt.length; i++) {
-		 			min = (arrayInt[i] < min) ? arrayInt[i] : min;
-					max = (arrayInt[i] > max) ? arrayInt[i] : max;
-		 		}
+		/* Primeira tentativa, analisando counting */
 
-		 		long k = (max - min) + 1;
-		 		
-		 		/* Calculando qte de digitos do maior elemento (d) */
-		 		int d = 0;
-		 		for (int exp = 1; max/exp > 0; exp *= 10)
-            				d++;
+		/** Range Condition
+		* range pro size
+		* numero de instancias pequena (500.000) aceita o 1.5 * size como memoria aux
+		* cc, aceita 50% do size
+		*/
+		boolean rangeCondition = false;
+		int maxSize = 500000;
+		if(size <= maxSize && k <= (size*1.5)){
+			rangeCondition = true;
+		}
+		else if(size > maxSize && k <= (size*0.5)){
+			rangeCondition = true;
+		}
+		//ja ordenado
+		if(size == 0 || max == min){}					
+ 		else if(rangeCondition && d > 4){
+			//System.out.println(">>>> CountingSort <<<<");
+			//begin = System.currentTimeMillis();
+			CountingSort.sort(arrayInt, max, min);
+			//System.out.println("Time CountingSort: "+((System.currentTimeMillis()) - begin)+" ms");
+		}
+ 		else if(d <= 4){
+			//System.out.println(">>>> RadixSort <<<<");
+			//begin = System.currentTimeMillis();
+			RadixSort.sort(arrayInt, max, min);
+			//System.out.println("Time RadixSort: "+((System.currentTimeMillis()) - begin)+" ms");
+		}
+ 		//test hash e calcular baldes vazios
+		// numero de baldes usados VS baldes criados
+		// % de baldes vazios
+ 		else if(testHashBucket(size, max, min, arrayInt)){
+			//System.out.println(">>>> BucketSort <<<<"); //muita estrutura dados
+			//begin = System.currentTimeMillis();
+			BucketSort.sort(arrayInt, max, min);
+			//System.out.println("Time BucketSort: "+((System.currentTimeMillis()) - begin)+" ms");
+		}
+ 		else{
+			//System.out.println(">>>> QuickDualPivot <<<<");
+			//begin = System.currentTimeMillis();
+			QuickDualPivot.sort(arrayInt);
+		 	//System.out.println("Time QuickDualPivot: "+((System.currentTimeMillis()) - begin)+" ms");
+		}			
 
-		 		//System.out.println("max: "+max+"\nmin: "+min+"\nrange (k): "+k+"\nnum de dig (d): "+d);
-		 		//System.out.println("Number. Size : "+arrayInt.length);
-
-		 		/* Primeira tentativa, analisando counting */
-
-		 		/** Range Condition
-		 		* range pro size
-		 		* numero de instancias pequena (500.000) aceita o 1.5 * size como memoria aux
-				* cc, aceita 50% do size
-				*/
-				boolean rangeCondition = false;
-				int maxSize = 500000;
-				if(size <= maxSize && k <= (size*1.5)){
-					rangeCondition = true;
-				}
-				else if(size > maxSize && k <= (size*0.5)){
-					rangeCondition = true;
-				}
-
-				//ja ordenado
-		 		if(size == 0 || max == min){}					
-
-		 		else if(rangeCondition && d > 4){
-		 			//System.out.println(">>>> CountingSort <<<<");
-		 			//begin = System.currentTimeMillis();
-		 			CountingSort.sort(arrayInt, max, min);
-		 			//System.out.println("Time CountingSort: "+((System.currentTimeMillis()) - begin)+" ms");
-		 		}
-
-		 		else if(d <= 4){
-		 			//System.out.println(">>>> RadixSort <<<<");
-		 			//begin = System.currentTimeMillis();
-		 			RadixSort.sort(arrayInt, max, min);
-		 			//System.out.println("Time RadixSort: "+((System.currentTimeMillis()) - begin)+" ms");
-		 		}
-
-		 		//test hash e calcular baldes vazios
-		 		// numero de baldes usados VS baldes criados
-		 		// % de baldes vazios
-
-		 		else if(testHashBucket(size, max, min, arrayInt)){
-		 			//System.out.println(">>>> BucketSort <<<<"); //muita estrutura dados
-		 			//begin = System.currentTimeMillis();
-		 			BucketSort.sort(arrayInt, max, min);
-		 			//System.out.println("Time BucketSort: "+((System.currentTimeMillis()) - begin)+" ms");
-		 		}
-
-		 		else{
-		 			//System.out.println(">>>> Arrays <<<<");
-		 			//begin = System.currentTimeMillis();
-		 			QuickDualPivot.sort(arrayInt);
-		 			//System.out.println("Time Arrays: "+((System.currentTimeMillis()) - begin)+" ms");
-		 		}			
-
-	            /* Exibindo vetor */
-	            for (int i = 0; i < arrayInt.length; i++) 
-                	System.out.println(arrayInt[i]);         
+	        /* Exibindo vetor */
+	        for (int i = 0; i < arrayInt.length; i++) 
+                System.out.println(arrayInt[i]);         
             }
             else{
 
@@ -116,18 +106,15 @@ class HeuristicMain {
             	j++;
 
             	//Preenchendo o array
-	            while((line = inReader.readLine()) != null) {
-	            	arrayString[j] = line;              
-	                j++;
-	            }
-
-	            SortString.sort(arrayString);
-
-	            /* Exibindo vetor */
-	            for (int i = 0; i < arrayString.length; i++) 
-                	System.out.println(arrayString[i]);
-
-            }
+	        while((line = inReader.readLine()) != null) {
+	            arrayString[j] = line;              
+	            j++;
+	        }
+               SortString.sort(arrayString);
+              /* Exibindo vetor */
+	      for (int i = 0; i < arrayString.length; i++) 
+              	  System.out.println(arrayString[i]);
+	    }
             inReader.close();              
 
           }catch (IOException e) {
