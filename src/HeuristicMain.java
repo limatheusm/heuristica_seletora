@@ -96,7 +96,7 @@ class HeuristicMain {
 
 	        /* Exibindo vetor */
 	        for (int i = 0; i < arrayInt.length; i++) 
-                System.out.println(arrayInt[i]);         
+                	System.out.println(arrayInt[i]);         
             }
             else{
 
@@ -110,10 +110,10 @@ class HeuristicMain {
 	            arrayString[j] = line;              
 	            j++;
 	        }
-               SortString.sort(arrayString);
-              /* Exibindo vetor */
-	      for (int i = 0; i < arrayString.length; i++) 
-              	  System.out.println(arrayString[i]);
+               	SortString.sort(arrayString);
+              	/* Exibindo vetor */
+	      	for (int i = 0; i < arrayString.length; i++) 
+              	  	System.out.println(arrayString[i]);
 	    }
             inReader.close();              
 
